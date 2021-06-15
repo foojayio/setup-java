@@ -312,17 +312,15 @@ async function getPackageFileUrl(ephemeralId: string) {
     maxRetries: 3
   });
 
-  const headerDict = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Disco-User-Info': 'setup-java@v1'
-  };
-  const requestOptions = {
-    headers: new Headers(headerDict)
+  http.requestOptions = {
+    headers: {
+      [httpm.Headers.Accept]: 'application/json',
+      [httpm.Headers.ContentType]: 'application/json'
+      //[httpm.Headers.UserAgent]: 'setup-java@v1',
+    }
   };
 
-  const response = await http.get(url, requestOptions);
+  const response = await http.get(url);
   const statusCode = response.message.statusCode || 0;
   if (statusCode == 200) {
     let body = '';

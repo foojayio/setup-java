@@ -33778,16 +33778,13 @@ function getPackageFileUrl(ephemeralId) {
             allowRetries: true,
             maxRetries: 3
         });
-        const headerDict = {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Disco-User-Info': 'setup-java@v1'
+        http.requestOptions = {
+            headers: {
+                [httpm.Headers.Accept]: 'application/json',
+                [httpm.Headers.ContentType]: 'application/json',
+            }
         };
-        const requestOptions = {
-            headers: new Headers(headerDict)
-        };
-        const response = yield http.get(url, requestOptions);
+        const response = yield http.get(url);
         const statusCode = response.message.statusCode || 0;
         if (statusCode == 200) {
             let body = '';
