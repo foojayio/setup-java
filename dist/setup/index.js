@@ -25768,9 +25768,9 @@ exports.INPUT_GPG_PASSPHRASE = 'gpg-passphrase';
 exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = undefined;
 exports.INPUT_DEFAULT_GPG_PASSPHRASE = 'GPG_PASSPHRASE';
 exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = 'gpg-private-key-fingerprint';
-exports.DISCO_URL = 'https://stage.api.foojay.io';
-exports.PACKAGES_PATH = '/disco/v1.0/packages';
-exports.EPHEMERAL_IDS_PATH = '/disco/v1.0/ephemeral_ids';
+exports.DISCO_URL = 'https://api.foojay.io';
+exports.PACKAGES_PATH = '/disco/v2.0/packages';
+exports.EPHEMERAL_IDS_PATH = '/disco/v2.0/ephemeral_ids';
 exports.DISTROS = [
     'aoj',
     'aoj_openj9',
@@ -33745,6 +33745,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
             try {
                 body = yield response.readBody();
                 json = JSON.parse(body);
+                json = json.result;
             }
             catch (err) {
                 core.debug(`Unable to read body: ${err.message}`);
@@ -33777,14 +33778,26 @@ function getPackageFileUrl(ephemeralId) {
             allowRetries: true,
             maxRetries: 3
         });
-        const response = yield http.get(url);
+        const headerDict = {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Disco-User-Info': 'setup-java@v1'
+        };
+        const requestOptions = {
+            headers: new Headers(headerDict)
+        };
+        const response = yield http.get(url, requestOptions);
         const statusCode = response.message.statusCode || 0;
         if (statusCode == 200) {
             let body = '';
             try {
                 body = yield response.readBody();
                 let json = JSON.parse(body);
-                return json.direct_download_uri;
+                json = json.result;
+                if (json.length > 0) {
+                    return json[0].direct_download_uri;
+                }
             }
             catch (err) {
                 core.debug(`Unable to read body: ${err.message}`);

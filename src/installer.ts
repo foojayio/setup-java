@@ -274,6 +274,7 @@ async function getDownloadInfo(
     try {
       body = await response.readBody();
       json = JSON.parse(body);
+      json = json.result;
     } catch (err) {
       core.debug(`Unable to read body: ${err.message}`);
     }
@@ -311,14 +312,27 @@ async function getPackageFileUrl(ephemeralId: string) {
     maxRetries: 3
   });
 
-  const response = await http.get(url);
+  const headerDict = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Disco-User-Info': 'setup-java@v1'
+  };
+  const requestOptions = {
+    headers: new Headers(headerDict)
+  };
+
+  const response = await http.get(url, requestOptions);
   const statusCode = response.message.statusCode || 0;
   if (statusCode == 200) {
     let body = '';
     try {
       body = await response.readBody();
       let json = JSON.parse(body);
-      return json.direct_download_uri;
+      json = json.result;
+      if (json.length > 0) {
+        return json[0].direct_download_uri;
+      }
     } catch (err) {
       core.debug(`Unable to read body: ${err.message}`);
     }

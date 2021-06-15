@@ -1032,8 +1032,8 @@ exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = undefined;
 exports.INPUT_DEFAULT_GPG_PASSPHRASE = 'GPG_PASSPHRASE';
 exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = 'gpg-private-key-fingerprint';
 exports.DISCO_URL = 'https://api.foojay.io';
-exports.PACKAGES_PATH = '/disco/v1.0/packages';
-exports.EPHEMERAL_IDS_PATH = '/disco/v1.0/ephemeral_ids';
+exports.PACKAGES_PATH = '/disco/v2.0/packages';
+exports.EPHEMERAL_IDS_PATH = '/disco/v2.0/ephemeral_ids';
 exports.DISTROS = [
     'aoj',
     'aoj_openj9',
