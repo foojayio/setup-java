@@ -33776,14 +33776,13 @@ function getPackageFileUrl(ephemeralId) {
         let url = constants.DISCO_URL + constants.EPHEMERAL_IDS_PATH + '/' + ephemeralId;
         const http = new httpm.HttpClient('bundle-info', undefined, {
             allowRetries: true,
-            maxRetries: 3
-        });
-        http.requestOptions = {
+            maxRetries: 3,
             headers: {
-                [httpm.Headers.Accept]: 'application/json',
-                [httpm.Headers.ContentType]: 'application/json',
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Disco-User-Info': 'setup-java@v1'
             }
-        };
+        });
         const response = yield http.get(url);
         const statusCode = response.message.statusCode || 0;
         if (statusCode == 200) {
