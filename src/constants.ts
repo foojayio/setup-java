@@ -30,6 +30,7 @@ export const DISTROS: string[] = [
   'oracle_openjdk',
   'openlogic',
   'sap_machine',
+  'temurin',
   'trava',
   'zulu'
 ];
