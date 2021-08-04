@@ -33688,7 +33688,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
                 distribution = distro.toLowerCase();
             }
             else {
-                throw new Error(`distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | sap_machine | trava | zulu]`);
+                throw new Error(`distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | sap_machine | temurin | trava | zulu]`);
             }
         }
         else {

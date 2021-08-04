@@ -19,10 +19,10 @@ steps:
 - uses: actions/checkout@v2
 - uses: actions/setup-java@v1
   with:
-    java-version: '9.0.4' # The JDK version to make available on the path.
+    java-version: '11.0.10' # The JDK version to make available on the path.
     java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
     architecture: x64 # (x64 or x86) - defaults to x64
-    distro      : zulu #(aoj, aoj_openj9, corretto, dragonwell, liberica, ojdk_build, oracle_open_jdk, sap_machine, zulu) - defaults to zulu
+    distro      : zulu #(aoj, aoj_openj9, corretto, dragonwell, liberica, microsoft, ojdk_build, oracle_openjdk, openlogic, sap_machine, temurin, trava, zulu) - defaults to zulu
 - run: java -cp java HelloWorldApp
 ```
 Examples of version specifications that the java-version parameter will accept:
