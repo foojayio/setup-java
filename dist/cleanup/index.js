@@ -1045,6 +1045,7 @@ exports.DISTROS = [
     'oracle_openjdk',
     'openlogic',
     'sap_machine',
+    'semeru',
     'temurin',
     'trava',
     'zulu'
