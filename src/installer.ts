@@ -220,18 +220,22 @@ async function getDownloadInfo(
     distribution = 'zulu';
   }
   let archiveType;
+  let libCType;
   if (IS_WINDOWS) {
     operatingSystem = 'windows';
     archiveType = 'zip';
+    libCType = 'c_std_lib';
   } else {
     if (process.platform === 'darwin') {
       operatingSystem = 'macos';
       let zipArchive =
         distribution === 'liberica' || distribution === 'openlogic';
       archiveType = zipArchive ? 'zip' : 'tar.gz';
+      libCType = 'libc';
     } else {
       operatingSystem = 'linux';
       archiveType = distribution === 'ojdk_build' ? 'zip' : 'tar.gz';
+      libCType = 'glibc';
     }
   }
 
@@ -253,6 +257,7 @@ async function getDownloadInfo(
   url += '&architecture=' + architecture;
   url += '&operating_system=' + operatingSystem;
   url += '&archive_type=' + archiveType;
+  url += '&lib_c_type=' + libCType;
   if (
     version.includes('x') ||
     version.includes('ea') ||
