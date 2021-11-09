@@ -297,14 +297,28 @@ async function getDownloadInfo(
   let curUrl = '';
   console.log('json: ' + json);
   if (json.length > 0) {
-    curVersion =
-      json[0].feature_version +
-      '.' +
-      json[0].interim_version +
-      '.' +
-      json[0].update_version +
-      '.' +
-      json[0].patch_version;
+    curVersion = json[0].feature_version;
+
+    var updateEqualZero = json[0].update_version == 0;
+    var patchEqualZero = json[0].patch_version == 0;
+
+    if (!updateEqualZero) {
+      curVersion += '.';
+      curVersion += json[0].interim_version;
+      curVersion += '.';
+      curVersion += json[0].update_version;
+      if (!patchEqualZero) {
+        curVersion += '.';
+        curVersion += json[0].patch_version;
+      }
+    } else if (updateEqualZero && !patchEqualZero) {
+      curVersion += '.';
+      curVersion += json[0].interim_version;
+      curVersion += '.';
+      curVersion += json[0].update_version;
+      curVersion += '.';
+      curVersion += json[0].patch_version;
+    }
     curUrl = await getPackageFileUrl(json[0].links.pkg_info_uri);
   }
 
