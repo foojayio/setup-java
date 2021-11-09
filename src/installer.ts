@@ -213,7 +213,7 @@ async function getDownloadInfo(
       distribution = distro.toLowerCase();
     } else {
       throw new Error(
-        `distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu]`
+        `distro argument '${distro}' is not in [aoj | aoj_openj9 | bisheng | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu]`
       );
     }
   } else {

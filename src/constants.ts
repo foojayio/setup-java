@@ -21,6 +21,7 @@ export const PACKAGES_PATH = '/disco/v3.0/packages';
 export const DISTROS: string[] = [
   'aoj',
   'aoj_openj9',
+  'bisheng',
   'corretto',
   'dragonwell',
   'jetbrains',

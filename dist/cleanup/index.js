@@ -1037,6 +1037,7 @@ exports.PACKAGES_PATH = '/disco/v3.0/packages';
 exports.DISTROS = [
     'aoj',
     'aoj_openj9',
+    'bisheng',
     'corretto',
     'dragonwell',
     'jetbrains',
