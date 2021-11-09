@@ -265,7 +265,6 @@ async function getDownloadInfo(
   ) {
     url += '&latest=available';
   }
-  console.log('url to call: ' + url);
 
   const http = new httpm.HttpClient('bundles', undefined, {
     allowRetries: true,
@@ -306,9 +305,7 @@ async function getDownloadInfo(
       json[0].update_version +
       '.' +
       json[0].patch_version;
-    console.log('curVersion: ' + curVersion);
-    curUrl = json[0].links.pkg_info_uri;
-    console.log('curUrl: ' + curUrl);
+    curUrl = await getPackageFileUrl(json[0].links.pkg_info_uri);
   }
 
   if (curUrl == '') {
@@ -318,6 +315,37 @@ async function getDownloadInfo(
   }
 
   return {version: curVersion, url: curUrl};
+}
+
+async function getPackageFileUrl(url: string) {
+  const http = new httpm.HttpClient('bundle-info', undefined, {
+    allowRetries: true,
+    maxRetries: 3,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Disco-User-Info': 'setup-java@v1'
+    }
+  });
+
+  const response = await http.get(url);
+  const statusCode = response.message.statusCode || 0;
+  if (statusCode == 200) {
+    let body = '';
+    try {
+      body = await response.readBody();
+      let json = JSON.parse(body);
+      json = json.result;
+      if (json.length > 0) {
+        return json[0].direct_download_uri;
+      }
+    } catch (err) {
+      core.debug(`Unable to read body: ${err.message}`);
+    }
+    const message = `Unexpected HTTP status code '${response.message.statusCode}' when retrieving versions from '${url}'. ${body}`.trim();
+    throw new Error(message);
+  }
+  return '';
 }
 
 function getJdkDirectory(destinationFolder: string): string {
