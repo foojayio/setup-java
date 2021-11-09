@@ -18,7 +18,6 @@ export const STATE_GPG_PRIVATE_KEY_FINGERPRINT = 'gpg-private-key-fingerprint';
 
 export const DISCO_URL = 'https://stage.api.foojay.io';
 export const PACKAGES_PATH = '/disco/v3.0/packages';
-export const IDS_PATH = '/disco/v3.0/ids';
 export const DISTROS: string[] = [
   'aoj',
   'aoj_openj9',

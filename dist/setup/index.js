@@ -25779,7 +25779,7 @@ exports.range = range;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DISTROS = exports.IDS_PATH = exports.PACKAGES_PATH = exports.DISCO_URL = exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = exports.INPUT_DEFAULT_GPG_PASSPHRASE = exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = exports.INPUT_GPG_PASSPHRASE = exports.INPUT_GPG_PRIVATE_KEY = exports.INPUT_SETTINGS_PATH = exports.INPUT_SERVER_PASSWORD = exports.INPUT_SERVER_USERNAME = exports.INPUT_SERVER_ID = exports.INPUT_DISTRO = exports.INPUT_JDK_FILE = exports.INPUT_JAVA_PACKAGE = exports.INPUT_ARCHITECTURE = exports.INPUT_JAVA_VERSION = exports.INPUT_VERSION = void 0;
+exports.DISTROS = exports.PACKAGES_PATH = exports.DISCO_URL = exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = exports.INPUT_DEFAULT_GPG_PASSPHRASE = exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = exports.INPUT_GPG_PASSPHRASE = exports.INPUT_GPG_PRIVATE_KEY = exports.INPUT_SETTINGS_PATH = exports.INPUT_SERVER_PASSWORD = exports.INPUT_SERVER_USERNAME = exports.INPUT_SERVER_ID = exports.INPUT_DISTRO = exports.INPUT_JDK_FILE = exports.INPUT_JAVA_PACKAGE = exports.INPUT_ARCHITECTURE = exports.INPUT_JAVA_VERSION = exports.INPUT_VERSION = void 0;
 exports.INPUT_VERSION = 'version';
 exports.INPUT_JAVA_VERSION = 'java-version';
 exports.INPUT_ARCHITECTURE = 'architecture';
@@ -25797,7 +25797,6 @@ exports.INPUT_DEFAULT_GPG_PASSPHRASE = 'GPG_PASSPHRASE';
 exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = 'gpg-private-key-fingerprint';
 exports.DISCO_URL = 'https://stage.api.foojay.io';
 exports.PACKAGES_PATH = '/disco/v3.0/packages';
-exports.IDS_PATH = '/disco/v3.0/ids';
 exports.DISTROS = [
     'aoj',
     'aoj_openj9',
@@ -33582,7 +33581,6 @@ const tc = __importStar(__webpack_require__(533));
 const fs = __importStar(__webpack_require__(747));
 const path = __importStar(__webpack_require__(622));
 const util = __importStar(__webpack_require__(322));
-const constants = __importStar(__webpack_require__(694));
 const constants_1 = __webpack_require__(694);
 const tempDirectory = util.getTempDir();
 const IS_WINDOWS = util.isWindows();
@@ -33833,46 +33831,20 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         let curVersion = '0.0.0';
         let curUrl = '';
         if (json.length > 0) {
-            curVersion = json[0].java_version;
-            curUrl = yield getPackageFileUrl(json[0].id);
+            curVersion =
+                json[0].feature_version +
+                    '.' +
+                    json[0].interim_version +
+                    '.' +
+                    json[0].update_version +
+                    '.' +
+                    json[0].patch_version;
+            curUrl = json[0].links.pkg_info_uri;
         }
         if (curUrl == '') {
             throw new Error(`No valid download found for ${distribution} with version ${version} and package ${packageType}. Please download your own jdk file and add the jdkFile argument`);
         }
         return { version: curVersion, url: curUrl };
-    });
-}
-function getPackageFileUrl(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let url = constants.DISCO_URL + constants.IDS_PATH + '/' + id;
-        const http = new httpm.HttpClient('bundle-info', undefined, {
-            allowRetries: true,
-            maxRetries: 3,
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Disco-User-Info': 'setup-java@v1'
-            }
-        });
-        const response = yield http.get(url);
-        const statusCode = response.message.statusCode || 0;
-        if (statusCode == 200) {
-            let body = '';
-            try {
-                body = yield response.readBody();
-                let json = JSON.parse(body);
-                json = json.result;
-                if (json.length > 0) {
-                    return json[0].direct_download_uri;
-                }
-            }
-            catch (err) {
-                core.debug(`Unable to read body: ${err.message}`);
-            }
-            const message = `Unexpected HTTP status code '${response.message.statusCode}' when retrieving versions from '${url}'. ${body}`.trim();
-            throw new Error(message);
-        }
-        return '';
     });
 }
 function getJdkDirectory(destinationFolder) {
