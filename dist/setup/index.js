@@ -33801,7 +33801,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         url += '&architecture=' + architecture;
         url += '&operating_system=' + operatingSystem;
         url += '&archive_type=' + archiveType;
-        url += '&lib_c_type=' + libCType;
+        url += '&libc_type=' + libCType;
         if (version.includes('x') ||
             version.includes('ea') ||
             version.startsWith('1.')) {
