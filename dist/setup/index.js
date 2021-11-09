@@ -33802,6 +33802,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
             version.startsWith('1.')) {
             url += '&latest=available';
         }
+        console.log("url to call: " + url);
         const http = new httpm.HttpClient('bundles', undefined, {
             allowRetries: true,
             maxRetries: 3
@@ -33830,6 +33831,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         // Choose the most recent satisfying version
         let curVersion = '0.0.0';
         let curUrl = '';
+        console.log('json: ' + json);
         if (json.length > 0) {
             curVersion =
                 json[0].feature_version +
@@ -33839,8 +33841,9 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
                     json[0].update_version +
                     '.' +
                     json[0].patch_version;
+            console.log('curVersion: ' + curVersion);
             curUrl = json[0].links.pkg_info_uri;
-            console.log('url: ' + curUrl);
+            console.log('curUrl: ' + curUrl);
         }
         if (curUrl == '') {
             throw new Error(`No valid download found for ${distribution} with version ${version} and package ${packageType}. Please download your own jdk file and add the jdkFile argument`);
