@@ -300,6 +300,7 @@ async function getDownloadInfo(
       '.' +
       json[0].patch_version;
     curUrl = json[0].links.pkg_info_uri;
+    console.log('url: ' + curUrl);
   }
 
   if (curUrl == '') {

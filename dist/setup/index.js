@@ -33840,6 +33840,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
                     '.' +
                     json[0].patch_version;
             curUrl = json[0].links.pkg_info_uri;
+            console.log('url: ' + curUrl);
         }
         if (curUrl == '') {
             throw new Error(`No valid download found for ${distribution} with version ${version} and package ${packageType}. Please download your own jdk file and add the jdkFile argument`);
