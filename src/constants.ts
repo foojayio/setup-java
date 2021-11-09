@@ -17,21 +17,24 @@ export const INPUT_DEFAULT_GPG_PASSPHRASE = 'GPG_PASSPHRASE';
 export const STATE_GPG_PRIVATE_KEY_FINGERPRINT = 'gpg-private-key-fingerprint';
 
 export const DISCO_URL = 'https://stage.api.foojay.io';
-export const PACKAGES_PATH = '/disco/v2.0/packages';
-export const EPHEMERAL_IDS_PATH = '/disco/v2.0/ephemeral_ids';
+export const PACKAGES_PATH = '/disco/v3.0/packages';
+export const IDS_PATH = '/disco/v3.0/ids';
 export const DISTROS: string[] = [
   'aoj',
   'aoj_openj9',
   'corretto',
   'dragonwell',
+  'jetbrains',
+  'kona',
   'liberica',
   'microsoft',
   'ojdk_build',
+  'openlogic',
   'oracle_openjdk',
   'oracle',
-  'openlogic',
   'sap_machine',
   'semeru',
+  'semeru_certified',
   'temurin',
   'trava',
   'zulu'

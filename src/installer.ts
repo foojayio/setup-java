@@ -213,7 +213,7 @@ async function getDownloadInfo(
       distribution = distro.toLowerCase();
     } else {
       throw new Error(
-        `distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | temurin | trava | zulu]`
+        `distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu]`
       );
     }
   } else {
@@ -258,7 +258,7 @@ async function getDownloadInfo(
     version.includes('ea') ||
     version.startsWith('1.')
   ) {
-    url += '&latest=overall';
+    url += '&latest=available';
   }
 
   const http = new httpm.HttpClient('bundles', undefined, {
@@ -292,7 +292,7 @@ async function getDownloadInfo(
   let curUrl = '';
   if (json.length > 0) {
     curVersion = json[0].java_version;
-    curUrl = await getPackageFileUrl(json[0].ephemeral_id);
+    curUrl = await getPackageFileUrl(json[0].id);
   }
 
   if (curUrl == '') {
@@ -304,9 +304,8 @@ async function getDownloadInfo(
   return {version: curVersion, url: curUrl};
 }
 
-async function getPackageFileUrl(ephemeralId: string) {
-  let url: string =
-    constants.DISCO_URL + constants.EPHEMERAL_IDS_PATH + '/' + ephemeralId;
+async function getPackageFileUrl(id: string) {
+  let url: string = constants.DISCO_URL + constants.IDS_PATH + '/' + id;
   const http = new httpm.HttpClient('bundle-info', undefined, {
     allowRetries: true,
     maxRetries: 3,

@@ -25779,7 +25779,7 @@ exports.range = range;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DISTROS = exports.EPHEMERAL_IDS_PATH = exports.PACKAGES_PATH = exports.DISCO_URL = exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = exports.INPUT_DEFAULT_GPG_PASSPHRASE = exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = exports.INPUT_GPG_PASSPHRASE = exports.INPUT_GPG_PRIVATE_KEY = exports.INPUT_SETTINGS_PATH = exports.INPUT_SERVER_PASSWORD = exports.INPUT_SERVER_USERNAME = exports.INPUT_SERVER_ID = exports.INPUT_DISTRO = exports.INPUT_JDK_FILE = exports.INPUT_JAVA_PACKAGE = exports.INPUT_ARCHITECTURE = exports.INPUT_JAVA_VERSION = exports.INPUT_VERSION = void 0;
+exports.DISTROS = exports.IDS_PATH = exports.PACKAGES_PATH = exports.DISCO_URL = exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = exports.INPUT_DEFAULT_GPG_PASSPHRASE = exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = exports.INPUT_GPG_PASSPHRASE = exports.INPUT_GPG_PRIVATE_KEY = exports.INPUT_SETTINGS_PATH = exports.INPUT_SERVER_PASSWORD = exports.INPUT_SERVER_USERNAME = exports.INPUT_SERVER_ID = exports.INPUT_DISTRO = exports.INPUT_JDK_FILE = exports.INPUT_JAVA_PACKAGE = exports.INPUT_ARCHITECTURE = exports.INPUT_JAVA_VERSION = exports.INPUT_VERSION = void 0;
 exports.INPUT_VERSION = 'version';
 exports.INPUT_JAVA_VERSION = 'java-version';
 exports.INPUT_ARCHITECTURE = 'architecture';
@@ -25796,21 +25796,24 @@ exports.INPUT_DEFAULT_GPG_PRIVATE_KEY = undefined;
 exports.INPUT_DEFAULT_GPG_PASSPHRASE = 'GPG_PASSPHRASE';
 exports.STATE_GPG_PRIVATE_KEY_FINGERPRINT = 'gpg-private-key-fingerprint';
 exports.DISCO_URL = 'https://stage.api.foojay.io';
-exports.PACKAGES_PATH = '/disco/v2.0/packages';
-exports.EPHEMERAL_IDS_PATH = '/disco/v2.0/ephemeral_ids';
+exports.PACKAGES_PATH = '/disco/v3.0/packages';
+exports.IDS_PATH = '/disco/v3.0/ids';
 exports.DISTROS = [
     'aoj',
     'aoj_openj9',
     'corretto',
     'dragonwell',
+    'jetbrains',
+    'kona',
     'liberica',
     'microsoft',
     'ojdk_build',
+    'openlogic',
     'oracle_openjdk',
     'oracle',
-    'openlogic',
     'sap_machine',
     'semeru',
+    'semeru_certified',
     'temurin',
     'trava',
     'zulu'
@@ -33755,7 +33758,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
                 distribution = distro.toLowerCase();
             }
             else {
-                throw new Error(`distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | temurin | trava | zulu]`);
+                throw new Error(`distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu]`);
             }
         }
         else {
@@ -33799,7 +33802,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         if (version.includes('x') ||
             version.includes('ea') ||
             version.startsWith('1.')) {
-            url += '&latest=overall';
+            url += '&latest=available';
         }
         const http = new httpm.HttpClient('bundles', undefined, {
             allowRetries: true,
@@ -33831,7 +33834,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         let curUrl = '';
         if (json.length > 0) {
             curVersion = json[0].java_version;
-            curUrl = yield getPackageFileUrl(json[0].ephemeral_id);
+            curUrl = yield getPackageFileUrl(json[0].id);
         }
         if (curUrl == '') {
             throw new Error(`No valid download found for ${distribution} with version ${version} and package ${packageType}. Please download your own jdk file and add the jdkFile argument`);
@@ -33839,9 +33842,9 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         return { version: curVersion, url: curUrl };
     });
 }
-function getPackageFileUrl(ephemeralId) {
+function getPackageFileUrl(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        let url = constants.DISCO_URL + constants.EPHEMERAL_IDS_PATH + '/' + ephemeralId;
+        let url = constants.DISCO_URL + constants.IDS_PATH + '/' + id;
         const http = new httpm.HttpClient('bundle-info', undefined, {
             allowRetries: true,
             maxRetries: 3,
