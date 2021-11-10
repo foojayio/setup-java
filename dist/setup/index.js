@@ -33838,7 +33838,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         let curUrl = '';
         console.log('json: ' + json);
         if (json.length > 0) {
-            curVersion = json[0].feature_version;
+            curVersion = json[0].feature_version + '';
             var updateEqualZero = json[0].update_version == 0;
             var patchEqualZero = json[0].patch_version == 0;
             if (!updateEqualZero) {
