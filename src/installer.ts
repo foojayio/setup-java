@@ -213,25 +213,29 @@ async function getDownloadInfo(
       distribution = distro.toLowerCase();
     } else {
       throw new Error(
-        `distro argument '${distro}' is not in [aoj | aoj_openj9 | corretto | dragonwell | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | temurin | trava | zulu]`
+        `distro argument '${distro}' is not in [aoj | aoj_openj9 | bisheng | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu]`
       );
     }
   } else {
     distribution = 'zulu';
   }
   let archiveType;
+  let libCType;
   if (IS_WINDOWS) {
     operatingSystem = 'windows';
     archiveType = 'zip';
+    libCType = 'c_std_lib';
   } else {
     if (process.platform === 'darwin') {
       operatingSystem = 'macos';
       let zipArchive =
         distribution === 'liberica' || distribution === 'openlogic';
       archiveType = zipArchive ? 'zip' : 'tar.gz';
+      libCType = 'libc';
     } else {
       operatingSystem = 'linux';
       archiveType = distribution === 'ojdk_build' ? 'zip' : 'tar.gz';
+      libCType = 'glibc';
     }
   }
 
@@ -253,12 +257,13 @@ async function getDownloadInfo(
   url += '&architecture=' + architecture;
   url += '&operating_system=' + operatingSystem;
   url += '&archive_type=' + archiveType;
+  url += '&libc_type=' + libCType;
   if (
     version.includes('x') ||
     version.includes('ea') ||
     version.startsWith('1.')
   ) {
-    url += '&latest=overall';
+    url += '&latest=available';
   }
 
   const http = new httpm.HttpClient('bundles', undefined, {
@@ -290,9 +295,31 @@ async function getDownloadInfo(
   // Choose the most recent satisfying version
   let curVersion = '0.0.0';
   let curUrl = '';
+  console.log('json: ' + json);
   if (json.length > 0) {
-    curVersion = json[0].java_version;
-    curUrl = await getPackageFileUrl(json[0].ephemeral_id);
+    curVersion = json[0].feature_version + '';
+
+    var updateEqualZero = json[0].update_version == 0;
+    var patchEqualZero = json[0].patch_version == 0;
+
+    if (!updateEqualZero) {
+      curVersion += '.';
+      curVersion += json[0].interim_version;
+      curVersion += '.';
+      curVersion += json[0].update_version;
+      if (!patchEqualZero) {
+        curVersion += '.';
+        curVersion += json[0].patch_version;
+      }
+    } else if (updateEqualZero && !patchEqualZero) {
+      curVersion += '.';
+      curVersion += json[0].interim_version;
+      curVersion += '.';
+      curVersion += json[0].update_version;
+      curVersion += '.';
+      curVersion += json[0].patch_version;
+    }
+    curUrl = await getPackageFileUrl(json[0].links.pkg_info_uri);
   }
 
   if (curUrl == '') {
@@ -304,9 +331,7 @@ async function getDownloadInfo(
   return {version: curVersion, url: curUrl};
 }
 
-async function getPackageFileUrl(ephemeralId: string) {
-  let url: string =
-    constants.DISCO_URL + constants.EPHEMERAL_IDS_PATH + '/' + ephemeralId;
+async function getPackageFileUrl(url: string) {
   const http = new httpm.HttpClient('bundle-info', undefined, {
     allowRetries: true,
     maxRetries: 3,
