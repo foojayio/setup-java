@@ -1053,7 +1053,8 @@ exports.DISTROS = [
     'semeru_certified',
     'temurin',
     'trava',
-    'zulu'
+    'zulu',
+    'zulu_prime'
 ];
 
 
