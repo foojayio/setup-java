@@ -25816,7 +25816,8 @@ exports.DISTROS = [
     'semeru_certified',
     'temurin',
     'trava',
-    'zulu'
+    'zulu',
+    'zulu_prime'
 ];
 
 
@@ -33757,7 +33758,7 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
                 distribution = distro.toLowerCase();
             }
             else {
-                throw new Error(`distro argument '${distro}' is not in [aoj | aoj_openj9 | bisheng | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu]`);
+                throw new Error(`distro argument '${distro}' is not in [aoj | aoj_openj9 | bisheng | corretto | dragonwell | jetbrains| kona | liberica | microsoft | ojdk_build | openlogic | oracle_openjdk | oracle | sap_machine | semeru | semeru_certified | temurin | trava | zulu | zulu_prime]`);
             }
         }
         else {
