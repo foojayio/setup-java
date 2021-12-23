@@ -33610,7 +33610,8 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         url += '&operating_system=' + operatingSystem;
         url += '&archive_type=' + archiveType;
         url += '&libc_type=' + libCType;
-        if (version.includes('x') ||
+        if (version.split('.').length == 1 ||
+            version.includes('x') ||
             version.includes('ea') ||
             version.startsWith('1.')) {
             url += '&latest=available';

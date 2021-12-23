@@ -259,6 +259,7 @@ async function getDownloadInfo(
   url += '&archive_type=' + archiveType;
   url += '&libc_type=' + libCType;
   if (
+    version.split('.').length == 1 ||
     version.includes('x') ||
     version.includes('ea') ||
     version.startsWith('1.')
