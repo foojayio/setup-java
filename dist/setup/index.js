@@ -33594,12 +33594,6 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         url += '?distro=' + distribution;
         if (version.length != 0) {
             url += '&version=' + version;
-            if (version.split('.').length == 1 ||
-                version.includes('x') ||
-                version.includes('ea') ||
-                version.startsWith('1.')) {
-                url += '&latest=available';
-            }
         }
         if (javaPackage === 'jdk+fx') {
             url += '&package_type=jdk';
@@ -33616,6 +33610,11 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         url += '&operating_system=' + operatingSystem;
         url += '&archive_type=' + archiveType;
         url += '&libc_type=' + libCType;
+        if (version.includes('x') ||
+            version.includes('ea') ||
+            version.startsWith('1.')) {
+            url += '&latest=available';
+        }
         const http = new httpm.HttpClient('bundles', undefined, {
             allowRetries: true,
             maxRetries: 3
