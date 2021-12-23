@@ -1859,7 +1859,7 @@ const json = __importStar(__webpack_require__(522));
 exports.json = json;
 const list = __importStar(__webpack_require__(657));
 exports.list = list;
-const map = __importStar(__webpack_require__(279));
+const map = __importStar(__webpack_require__(408));
 exports.map = map;
 const namespace = __importStar(__webpack_require__(916));
 exports.namespace = namespace;
@@ -1867,7 +1867,7 @@ const queue = __importStar(__webpack_require__(501));
 exports.queue = queue;
 const set = __importStar(__webpack_require__(496));
 exports.set = set;
-const stack = __importStar(__webpack_require__(134));
+const stack = __importStar(__webpack_require__(582));
 exports.stack = stack;
 const string = __importStar(__webpack_require__(97));
 exports.string = string;
@@ -8012,35 +8012,6 @@ module.exports = require("child_process");
 
 /***/ }),
 
-/***/ 134:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Pushes the given item to the stack.
- *
- * @param list - a list
- * @param item - an item
- */
-function push(list, item) {
-    list.push(item);
-}
-exports.push = push;
-/**
- * Pops and returns an item from the stack.
- *
- * @param list - a list
- */
-function pop(list) {
-    return list.pop() || null;
-}
-exports.pop = pop;
-//# sourceMappingURL=Stack.js.map
-
-/***/ }),
-
 /***/ 139:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -10725,187 +10696,6 @@ function nodeIterator_iteratorList() {
 }
 exports.nodeIterator_iteratorList = nodeIterator_iteratorList;
 //# sourceMappingURL=NodeIteratorAlgorithm.js.map
-
-/***/ }),
-
-/***/ 279:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const util_1 = __webpack_require__(68);
-/**
- * Gets the value corresponding to the given key.
- *
- * @param map - a map
- * @param key - a key
- */
-function get(map, key) {
-    return map.get(key);
-}
-exports.get = get;
-/**
- * Sets the value corresponding to the given key.
- *
- * @param map - a map
- * @param key - a key
- * @param val - a value
- */
-function set(map, key, val) {
-    map.set(key, val);
-}
-exports.set = set;
-/**
- * Removes the item with the given key or all items matching condition.
- *
- * @param map - a map
- * @param conditionOrItem - the key of an item to remove or a condition matching
- * items to remove
- */
-function remove(map, conditionOrItem) {
-    if (!util_1.isFunction(conditionOrItem)) {
-        map.delete(conditionOrItem);
-    }
-    else {
-        const toRemove = [];
-        for (const item of map) {
-            if (!!conditionOrItem.call(null, item)) {
-                toRemove.push(item[0]);
-            }
-        }
-        for (const key of toRemove) {
-            map.delete(key);
-        }
-    }
-}
-exports.remove = remove;
-/**
- * Determines if the map contains a value with the given key.
- *
- * @param map - a map
- * @param conditionOrItem - the key of an item to match or a condition matching
- * items
- */
-function contains(map, conditionOrItem) {
-    if (!util_1.isFunction(conditionOrItem)) {
-        return map.has(conditionOrItem);
-    }
-    else {
-        for (const item of map) {
-            if (!!conditionOrItem.call(null, item)) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
-exports.contains = contains;
-/**
- * Gets the keys of the map.
- *
- * @param map - a map
- */
-function keys(map) {
-    return new Set(map.keys());
-}
-exports.keys = keys;
-/**
- * Gets the values of the map.
- *
- * @param map - a map
- */
-function values(map) {
-    return [...map.values()];
-}
-exports.values = values;
-/**
- * Gets the size of the map.
- *
- * @param map - a map
- * @param condition - an optional condition to match
- */
-function size(map, condition) {
-    if (condition === undefined) {
-        return map.size;
-    }
-    else {
-        let count = 0;
-        for (const item of map) {
-            if (!!condition.call(null, item)) {
-                count++;
-            }
-        }
-        return count;
-    }
-}
-exports.size = size;
-/**
- * Determines if the map is empty.
- *
- * @param map - a map
- */
-function isEmpty(map) {
-    return map.size === 0;
-}
-exports.isEmpty = isEmpty;
-/**
- * Returns an iterator for the items of the map.
- *
- * @param map - a map
- * @param condition - an optional condition to match
- */
-function* forEach(map, condition) {
-    if (condition === undefined) {
-        yield* map;
-    }
-    else {
-        for (const item of map) {
-            if (!!condition.call(null, item)) {
-                yield item;
-            }
-        }
-    }
-}
-exports.forEach = forEach;
-/**
- * Creates and returns a shallow clone of map.
- *
- * @param map - a map
- */
-function clone(map) {
-    return new Map(map);
-}
-exports.clone = clone;
-/**
- * Returns a new map containing items from the map sorted in ascending
- * order.
- *
- * @param map - a map
- * @param lessThanAlgo - a function that returns `true` if its first argument
- * is less than its second argument, and `false` otherwise.
- */
-function sortInAscendingOrder(map, lessThanAlgo) {
-    const list = new Array(...map);
-    list.sort((itemA, itemB) => lessThanAlgo.call(null, itemA, itemB) ? -1 : 1);
-    return new Map(list);
-}
-exports.sortInAscendingOrder = sortInAscendingOrder;
-/**
- * Returns a new map containing items from the map sorted in descending
- * order.
- *
- * @param map - a map
- * @param lessThanAlgo - a function that returns `true` if its first argument
- * is less than its second argument, and `false` otherwise.
- */
-function sortInDescendingOrder(map, lessThanAlgo) {
-    const list = new Array(...map);
-    list.sort((itemA, itemB) => lessThanAlgo.call(null, itemA, itemB) ? 1 : -1);
-    return new Map(list);
-}
-exports.sortInDescendingOrder = sortInDescendingOrder;
-//# sourceMappingURL=Map.js.map
 
 /***/ }),
 
@@ -14217,6 +14007,14 @@ class NamespacePrefixMap {
 }
 exports.NamespacePrefixMap = NamespacePrefixMap;
 //# sourceMappingURL=NamespacePrefixMap.js.map
+
+/***/ }),
+
+/***/ 408:
+/***/ (function() {
+
+eval("require")("./Map");
+
 
 /***/ }),
 
@@ -22449,6 +22247,14 @@ class ShadowRootImpl extends DocumentFragmentImpl_1.DocumentFragmentImpl {
 }
 exports.ShadowRootImpl = ShadowRootImpl;
 //# sourceMappingURL=ShadowRootImpl.js.map
+
+/***/ }),
+
+/***/ 582:
+/***/ (function() {
+
+eval("require")("./Stack");
+
 
 /***/ }),
 
@@ -33788,6 +33594,12 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         url += '?distro=' + distribution;
         if (version.length != 0) {
             url += '&version=' + version;
+            if (version.split('.').length == 1 ||
+                version.includes('x') ||
+                version.includes('ea') ||
+                version.startsWith('1.')) {
+                url += '&latest=available';
+            }
         }
         if (javaPackage === 'jdk+fx') {
             url += '&package_type=jdk';
@@ -33804,11 +33616,6 @@ function getDownloadInfo(refs, version, arch, javaPackage, distro = 'zulu') {
         url += '&operating_system=' + operatingSystem;
         url += '&archive_type=' + archiveType;
         url += '&libc_type=' + libCType;
-        if (version.includes('x') ||
-            version.includes('ea') ||
-            version.startsWith('1.')) {
-            url += '&latest=available';
-        }
         const http = new httpm.HttpClient('bundles', undefined, {
             allowRetries: true,
             maxRetries: 3
