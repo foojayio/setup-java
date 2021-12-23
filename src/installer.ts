@@ -298,7 +298,6 @@ async function getDownloadInfo(
   // Choose the most recent satisfying version
   let curVersion = '0.0.0';
   let curUrl = '';
-  console.log('json: ' + json);
   if (json.length > 0) {
     curVersion = json[0].feature_version + '';
 
